@@ -5,7 +5,7 @@ generation, and deshredding. No Blockstore, RocksDB, or git dependencies.
 
 ```toml
 [dependencies]
-solana-shred = "=2.2.0"
+solana-shred = { git = "https://github.com/dysnix/solana-shred.git", tag = "2.2.0" }
 ```
 
 The public API lives in `solana_shred::shred`. Deshredding returns raw ledger
@@ -81,7 +81,6 @@ dependency to obtain a shred utility.
 
 ## Release
 
-Review the package contents and tests, publish `solana-shred` version `2.2.0`
-with `cargo publish --locked`, and tag the same source commit as `2.2.0`.
-Git tags are not uploaded to crates.io; the crate version is taken from
-`Cargo.toml`.
+Review the package contents and tests, then tag the release source commit as
+`2.2.0` and push that tag to the repository. Consumers depend on the git tag;
+`Cargo.lock` records its resolved commit. Registry publication is disabled.
