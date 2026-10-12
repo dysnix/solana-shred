@@ -1,26 +1,22 @@
 //! Self-contained replacement for the fork's developer-local capture scratch test.
 
 use {
-    solana_sdk::{hash::Hash, signature::Signer, signer::keypair::keypair_from_seed},
-    solana_shred::shred::{merkle, ProcessShredsStats, ReedSolomonCache, Shred, Shredder},
+    solana_hash::Hash,
+    solana_keypair::Keypair,
+    solana_shred::shred::{ProcessShredsStats, ReedSolomonCache, Shred, Shredder, merkle},
+    solana_signer::Signer,
     test_case::test_case,
 };
 
-#[test_case(false, false)]
-#[test_case(true, false)]
-#[test_case(true, true)]
-fn multiple_missing_data_shreds_recover_exact_payloads(chained: bool, last_in_slot: bool) {
-    let pool = rayon::ThreadPoolBuilder::new()
-        .num_threads(1)
-        .build()
-        .unwrap();
-    let keypair = keypair_from_seed(&[7; 32]).unwrap();
+#[test_case(false)]
+#[test_case(true)]
+fn multiple_missing_data_shreds_recover_exact_payloads(last_in_slot: bool) {
+    let keypair = Keypair::new_from_array([7; 32]);
     let data: Vec<_> = (0..16_384).map(|index| (index % 251) as u8).collect();
     let cache = ReedSolomonCache::default();
     let original = merkle::make_shreds_from_data(
-        &pool,
         &keypair,
-        chained.then(|| Hash::new_from_array([8; 32])),
+        Hash::new_from_array([8; 32]),
         &data,
         42,
         41,
@@ -64,5 +60,4 @@ fn multiple_missing_data_shreds_recover_exact_payloads(chained: bool, last_in_sl
     available.sort_by_key(merkle::Shred::index);
     let payloads = || available.iter().map(|shred| shred.payload().as_ref());
     assert_eq!(Shredder::deshred(payloads()).unwrap(), data);
-    assert_eq!(Shredder::deshred_unchecked(payloads()).unwrap(), data);
 }
