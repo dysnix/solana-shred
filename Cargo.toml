@@ -1,8 +1,9 @@
 [package]
 name = "solana-shred"
-version = "2.2.0"
+version = "4.3.0"
 publish = false
-edition = "2021"
+edition = "2024"
+rust-version = "1.97.1"
 license = "Apache-2.0"
 description = "Pinned Jito shred parsing, Merkle FEC recovery, and deshredding without ledger storage"
 repository = "https://github.com/dysnix/solana-shred"
@@ -11,30 +12,50 @@ readme = "README.md"
 keywords = ["solana", "shred", "fec", "reed-solomon", "deshred"]
 categories = ["network-programming", "encoding"]
 
+[features]
+default = []
+dev-context-only-utils = ["solana-perf/dev-context-only-utils"]
+
 [dependencies]
-assert_matches = "1.5.0"
-bincode = "1.3.3"
-bitflags = { version = "2.8.0", features = ["serde"] }
-itertools = "0.12.1"
-lazy-lru = "0.1.3"
-lazy_static = "1.5.0"
-log = "0.4"
-num_enum = "0.7.3"
-rand = "0.8.5"
-rayon = "1.10.0"
+assert_matches = { version = "1.5.0", features = [] }
+bitflags = { version = "2.13.1", features = ["serde"] }
+bytes = { version = "1.12.1", features = ["serde"] }
+itertools = { version = "0.14.0", features = [] }
+lazy-lru = { version = "0.1.3", features = [] }
+log = { version = "0.4.33", features = [] }
+num_enum = { version = "0.7.6", features = [] }
+rand = { version = "0.9.4", features = [] }
+rayon = { version = "1.12.0", features = [] }
 reed-solomon-erasure = { version = "6.0.0", features = ["simd-accel"] }
-serde = { version = "1.0.217", features = ["derive"] }
-solana-entry = "=2.2.0"
-solana-measure = "=2.2.0"
-solana-metrics = "=2.2.0"
-solana-perf = "=2.2.0"
-solana-rayon-threadlimit = "=2.2.0"
-solana-sdk = "=2.2.1"
-static_assertions = "1.1.0"
-thiserror = "2.0.11"
+serde = { version = "1.0.229", features = ["derive"] }
+solana-clock = { version = "3.2.0", features = [] }
+solana-cost-model = { version = "=4.3.0", features = ["agave-unstable-api"] }
+solana-entry = { version = "=4.3.0", features = ["agave-unstable-api"] }
+solana-hash = { version = "4.6.0", features = ["wincode"] }
+solana-keypair = { version = "3.1.2", features = [] }
+solana-measure = { version = "=4.3.0", features = [] }
+solana-metrics = { version = "=4.3.0", features = [] }
+solana-packet = { version = "4.3.0", features = [] }
+solana-perf = { version = "=4.3.0", features = ["agave-unstable-api"] }
+solana-pubkey = { version = "4.3.0", features = ["wincode"] }
+solana-sha256-hasher = { version = "3.1.0", features = [] }
+solana-signature = { version = "=3.5.2", features = ["wincode", "verify"] }
+solana-signer = { version = "3.0.1", features = [] }
+static_assertions = { version = "1.1.0", features = [] }
+thiserror = { version = "2.0.19", features = [] }
+wincode = { version = "0.6.1", features = ["derive", "bytes", "smallvec"] }
 
 [dev-dependencies]
 bs58 = "0.5.1"
-rand_chacha = "0.3.1"
-solana-logger = "2.2.1"
+rand_chacha = "0.9"
 test-case = "3.3.1"
+solana-system-transaction = "=4.1.0"
+agave-logger = { version = "=4.3.0", features = ["agave-unstable-api"] }
+solana-shred-version = "3.0.1"
+
+[dev-dependencies.solana-entry]
+version = "=4.3.0"
+features = ["agave-unstable-api", "dev-context-only-utils"]
+
+[dev-dependencies.solana-bls-signatures]
+version = "=3.4.0"
